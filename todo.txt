@@ -1,0 +1,35 @@
+La configuración inicial del Cmake (y del GnuMake que no me jaló) podemos encontrar en
+https://www.codeproject.com/Articles/1184735/Quick-Start-to-Use-Visual-Studio-Code-for-Cplusplu
+
+No parecía encontrar algunos de los includes por lo que en .vscode\c_cpp_properties.json se los metí en todas las plataformas
+ "/usr/include",
+ "/usr/include/c++/6.4.1",
+(No me gustó que no supiera recursionar, se me figura esto va a crecer exponencialmente con las bibliotecas de 
+    boost, poco, redis, memcahed, fix8, fastflow, etc...)
+
+Para ver cómo meter el ejecutable primario y referenciar las librerías propias
+https://cmake.org/cmake-tutorial/
+
+Si los shortcuts no te gustan, primero ve en donde están apuntando en el el Pallete (Control+Shift+P)
+    - Por ejemplo, para el Cmake:build tenía el F7
+    - File -> Preferences -> Keyboard Shortcuts -> {deseado} (control derecho, reasignar)
+
+* Adición de nuevos módulos CPP deberán meterse en CmakeLists.txt del raíz (no del testing, ojo)
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+Desarrollo de Beast Service Linux
+---------------------------------
+
+0.1 Obtener de Finamex
+    a. Archivo de datos de BMV (con Milisecond timestamp y de preferencia multicast tal como llega de BMV, no Setrib)
+    b. Archivo de datos de NASDAQ (con Milisecond timestamp y de preferencia en binario tal como llega de Activ)
+    c. Archivo de datos de FX (con Milisecond timestamp y en FIX tal como llega de FXSS)
+
+1.1. Crear un sistema de tres módulos (es uno para poderlo iniciar y que los tres de forma paralela comienzen a la par): 
+    a. Uno de lectura de archivos BMV y redifusión multicast
+    b. Otro de lectura de archivos Activ y redifusión por socket
+    c. Otro más de lectura de archivos FIX y redifusión via FIX 
+
+1.2. Dichos sistemas tendrán que repetir, en corto plazo, toda la recepción del día de forma sincronizada
+    a. Y podremos acelerarlos o alentarlos o pedirles que transmitan un cierto intervalo sólamente
