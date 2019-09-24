@@ -4,33 +4,52 @@ project(QuickStart)
 set(QUICK_START_VERSION_MAJOR 1)
 set(QUICK_START_VERSION_MINOR 0)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Creamos librerías
 set(SOURCESLIB ${PROJECT_SOURCE_DIR}/src/QuickStart.cpp)
-include_directories("${PROJECT_SOURCE_DIR}/include")
+include_directories(
+        "${PROJECT_SOURCE_DIR}/include"
+        "${PROJECT_SOURCE_DIR}/ConcurrentCollections/include"
+        "${PROJECT_SOURCE_DIR}/ParallelLib/include"
+        "${PROJECT_SOURCE_DIR}/LoggingLib/include"
+        )
 add_library(QuickStartLib STATIC ${SOURCESLIB})
 
 # Habilitamos testing
 enable_testing()
 add_subdirectory(test)
 
-# Creamos librerías
+
+####################################################################################################
+# MulticastSender - Creamos librerías
+####################################################################################################
 set(MULTICAST_SENDER_SOURCESLIB ${PROJECT_SOURCE_DIR}/src/MulticastSender.cpp)
 include_directories("${PROJECT_SOURCE_DIR}/include")
 add_library(MulticastSenderLib STATIC ${MULTICAST_SENDER_SOURCESLIB})
 
-# Creamos librerías
+####################################################################################################
+# MulticastReceiver - Creamos librerías
+####################################################################################################
 set(MULTICAST_RECEIVER_SOURCESLIB ${PROJECT_SOURCE_DIR}/src/MulticastReceiver.cpp)
 include_directories("${PROJECT_SOURCE_DIR}/include")
 add_library(MulticastReceiverLib STATIC ${MULTICAST_RECEIVER_SOURCESLIB})
 
-# Creamos librerías
+####################################################################################################
+# Parametros - Creamos librerías
+####################################################################################################
 set(PARAMETROS_SOURCESLIB ${PROJECT_SOURCE_DIR}/src/Parametros.cpp)
 include_directories("${PROJECT_SOURCE_DIR}/include")
 add_library(ParametrosLib STATIC ${PARAMETROS_SOURCESLIB})
+
+####################################################################################################
+# librerías externa
+####################################################################################################
+add_subdirectory(ParallelLib)
+add_subdirectory(ConcurrentCollections)
+add_subdirectory(LoggingLib)
 
 # Creamos el ejecutable prinipal y le pegamos la librería
 set(SOURCES 
@@ -49,6 +68,9 @@ target_link_libraries (
         ParametrosLib
         MulticastSenderLib
         MulticastReceiverLib        
+        ConcurrentCollections
+        ParallelLib
+        LoggingLib
         pthread
         ${Boost_SYSTEM_LIBRARY}
         # ejemplo para otras librerías de boost que vayan surgiendo
