@@ -20,8 +20,9 @@ Collections::ConcurrentDictionary<std::string, int> *dict3;
 
 void ThreadedInsert(int tid)
 {
-    // std::cout << "Launched by lambda " << tid << " thread " << std::this_thread::get_id() << std::endl;
-    Logging::Info("Launched by lambda " << tid << " thread " << std::this_thread::get_id());
+    std::stringstream s;
+    s << "Launched by lambda " << tid << " thread " << std::this_thread::get_id() ;
+    Logging::Info(s);
 
     for (int i = 0; i < 1000 * 1000; i++)
     {
